@@ -7,27 +7,50 @@ hash = 'd48c8e5af3af4132a51a28e482481e65'
 
 url = 'http://gateway.marvel.com/v1/public/'
 
-def getHeroes(limit, offset):
-    table = 'characters?'
-    filter = 'orderBy=name&limit=' + limit + '&offset=' + offset
+def getHeroInfo(hero_name):
+
+    table = 'characters'
+    filter = '?name=' + hero_name
     keys = '&ts=' + ts + '&apikey=' + apiKey + '&hash=' + hash
 
     r = get(url + table + filter + keys)
 
     content = r.json()
     content = content['data']
-    heroes = content['results']
+    list = content['results']
+    hero_info = list[0]
 
-    return heroes
+    return hero_info
 
-def GetHeroesTable(height, lenght):
-    heroesTable = []
+def getRandonComic(hero_name):
 
-    for i in range(height):
+    hero_info = getHeroInfo(hero_name)
+    hero_id = str(hero_info['id'])
 
-        limit = str(lenght)
-        offset = str(lenght * i)
+    table = 'comics'
+    filter = '?characters=' + hero_id + '&limit=1'
+    keys = '&ts=' + ts + '&apikey=' + apiKey + '&hash=' + hash
 
-        heroesTable.append(getHeroes(limit, offset))
+    r = get(url + table + filter + keys)
+    content = r.json()
+    content = content['data']
+    comics_n = content['total']
+    
+    offset = 0
+    comics = []
+    while offset < comics_n:
 
-    return heroesTable
+        filter = '?characters=' + hero_id + '&limit=100&offset=' + str(offset)
+
+        r = get(url + table + filter + keys)
+        content = r.json()
+        comics += content['data']['results']
+        offset += 100
+
+    return comics
+
+
+print(len(getRandonComic('Moon Knight')))
+
+
+
