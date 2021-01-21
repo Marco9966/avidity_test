@@ -1,5 +1,6 @@
 from requests import get
 from os import system as sys
+from random import choice
 
 ts = '1611107371000'
 apiKey = '433fdcaccd9941d17e609fe17c3fa262'
@@ -47,10 +48,4 @@ def getRandonComic(hero_name):
         comics += content['data']['results']
         offset += 100
 
-    return comics
-
-
-print(len(getRandonComic('Moon Knight')))
-
-
-
+    return choice(comics)
