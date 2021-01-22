@@ -1,13 +1,72 @@
 {% extends "template.html" %}
 {% block conteudo %}
-<div class="container">
-    <table>
-        <tr>
-            <td>
-                
-            </td>
-        </tr>
-    </table>
+<div>
+    <br>
+    <br>
+    <div style="text-align: center;">
+        <h4>Write a Marvel character name to get a randon comic from this character:</h4>
+        <form method="post" action="/">
+            <input type="text" style="width: 50%" name="character">
+            <input type="submit" style="width: 20%">
+        </form>
+    </div>
+
+    {% if comic_info or comic_info != None %}
+
+        <br>
+        <br>
+
+        <table style="border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <tr>
+                <td>
+                    <img src="{{ comic_info['thumbnail']['path'] + '/portrait_incredible.' + comic_info['thumbnail']['extension'] }}">
+                </td>
+                <td style="text-align: left;padding-left:5%;padding-right:30%">
+                    {% if comic_info['description'] != None %}
+                        <h4>Description:</h4>
+                        <h5>{{ comic_info['description'] | safe }}</h5>
+                    {% else %}
+                        <h4>There's no description available for this comic.</h4>
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h3>{{ comic_info['title'] }}</h3>
+                </td>
+            </tr>
+        </table>
+
+        <br>
+        <br>
+        
+        <table style="border-collapse: collapse;margin-left: 0;margin-right: auto;">
+            <tr>
+                <th colspan="5">
+                    <h3>Featuring: </h3>
+                </th>
+            </tr>
+            <tr>
+            {% for char_info in chars_info %}
+                {% if (chars_info.index(char_info))%5 == 0 %}
+                    </tr>
+                    <tr>
+                {% endif %}
+                <td style="padding:1%;">
+                    <img src="{{ char_info['thumbnail']['path'] + '/portrait_incredible.' + char_info['thumbnail']['extension'] }}" style="width: 100%;height: 100%;">
+                    <h4>{{ char_info['name'] }}</h4>
+                </td>
+            {% endfor %}
+            </tr>
+        </table>
+
+    {% endif %}
+
+    <br>
+    <br>
+
+    <h6>{{ comic_info['attributionText'] }}</h6>
+
 </div>
 {% endblock %}
 
